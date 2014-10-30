@@ -7,7 +7,11 @@ var argv = require('minimist')(process.argv.slice(2));
 if('_' in argv) {
 	if(argv._.indexOf('--verbose') >= 0) {
 		argv.verbose = true;
+	} else if(argv._.indexOf('--quiet') >= 0) {
+		argv.quiet = true;
 	}
+
+
 }
 
 whatTheStyle(argv);

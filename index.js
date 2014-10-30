@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 var state = {
     debug: false,
+    quiet: false,
     queue: [],
     visited: [],
     usedSelectors: [],
@@ -149,6 +150,9 @@ function dequeueAndCrawl(browser, baseUrl, allDone) {
         state.visited.push(url);
         var done = Q.defer();
         done.promise.then(function() {
+            if(!state.quiet && !state.debug) {
+                process.stdout.write('.');  
+            }
             setTimeout(function() {
                 dequeueAndCrawl(browser, baseUrl, allDone);
             }, 0);
@@ -157,6 +161,9 @@ function dequeueAndCrawl(browser, baseUrl, allDone) {
             createPage(error, page, null, url, baseUrl, done);
         });
     } else {
+        if(!state.quiet && !state.debug) {
+            process.stdout.write('\n');
+        }
         allDone.resolve();
     }
 }
@@ -194,6 +201,7 @@ module.exports = function(options) {
     
     if (!'url' in options) throw new Error('No url to analyze');
     state.debug = 'verbose' in options;
+    state.quiet = 'quiet' in options;
 
     var cb = options.done || function(report) {
         console.log(JSON.stringify(report, false, 2));
