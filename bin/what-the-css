@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var whatTheStyle = require('../index');
+
+var argv = require('minimist')(process.argv.slice(2));
+
+if('_' in argv) {
+	if(argv._.indexOf('--verbose') >= 0) {
+		argv.verbose = true;
+	}
+}
+
+whatTheStyle(argv);
